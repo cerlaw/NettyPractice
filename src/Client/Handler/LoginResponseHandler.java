@@ -20,18 +20,18 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println(new Date() + " :客户端开始登陆");
-
-        //创建登录对象
-        LoginRequestPacket packet = new LoginRequestPacket();
-        packet.setUserId(UUID.randomUUID().toString());
-        packet.setUserName("boss");
-        packet.setPassWord("MyPassWord");
-
-        ByteBuf byteBuf = PacketCodec.INSTANCE.encode(packet, ctx.alloc());
-
-        //写数据
-        ctx.channel().writeAndFlush(byteBuf);
+//        System.out.println(new Date() + " :客户端开始登陆");
+//
+//        //创建登录对象
+//        LoginRequestPacket packet = new LoginRequestPacket();
+//        packet.setUserId(UUID.randomUUID().toString());
+//        packet.setUserName("boss");
+//        packet.setPassWord("MyPassWord");
+//
+//        ByteBuf byteBuf = PacketCodec.INSTANCE.encode(packet, ctx.alloc());
+//
+//        //写数据
+//        ctx.channel().writeAndFlush(byteBuf);
         super.channelActive(ctx);
     }
 

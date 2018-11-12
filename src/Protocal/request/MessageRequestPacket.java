@@ -13,7 +13,15 @@ import lombok.Data;
 @Data
 public class MessageRequestPacket extends Packet {
 
-    private String message;
+    /**表示要发给那一个用户*/
+    String toUserId;
+
+    String message;
+
+    public MessageRequestPacket(String userId, String text) {
+        this.toUserId = userId;
+        this.message = text;
+    }
 
     @Override
     public Byte getCommand() {

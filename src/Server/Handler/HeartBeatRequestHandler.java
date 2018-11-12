@@ -20,7 +20,7 @@ public class HeartBeatRequestHandler extends SimpleChannelInboundHandler<HeartBe
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HeartBeatRequestPacket msg) throws Exception {
-        System.out.println("服务器收到心跳包，返回心跳包");
+//        System.out.println("服务器收到心跳包，返回心跳包");
         ctx.channel().writeAndFlush(new HeartBeatResponsePacket());
     }
 }

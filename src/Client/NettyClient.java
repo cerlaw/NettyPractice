@@ -6,10 +6,12 @@ import Client.Handler.LoginResponseHandler;
 import Client.Handler.MessagResponseHandler;
 import Codec.PacketDecoder;
 import Codec.PacketEncoder;
+import Protocal.request.LoginRequestPacket;
 import Protocal.request.MessageRequestPacket;
 import Protocal.PacketCodec;
 import Handler.IMIdleStateHandler;
 import Utils.LoginUtils;
+import Utils.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -21,6 +23,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.util.Date;
 import java.util.Scanner;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -80,19 +83,49 @@ public class NettyClient {
 
     private static void startConsoleThread(Channel channel) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
+//        executor.execute(() -> {
+//            while (!Thread.interrupted()) {
+//                if (LoginUtils.hasLogin(channel)) {
+//                    System.out.println("输入信息发送至客户端");
+//                    Scanner sc = new Scanner(System.in);
+//                    String line = sc.nextLine();
+//
+//                    MessageRequestPacket packet = new MessageRequestPacket();
+//                    packet.setMessage(line);
+//                    ByteBuf byteBuf = PacketCodec.INSTANCE.encode(packet, channel.alloc());
+//                    channel.writeAndFlush(byteBuf);
+//                }
+//            }
+//        });
+
+        Scanner sc = new Scanner(System.in);
+        LoginRequestPacket login = new LoginRequestPacket();
         executor.execute(() -> {
             while (!Thread.interrupted()) {
-                if (LoginUtils.hasLogin(channel)) {
-                    System.out.println("输入信息发送至客户端");
-                    Scanner sc = new Scanner(System.in);
-                    String line = sc.nextLine();
+                if (!SessionUtil.hasLogin(channel)) {
+                    System.out.print("输入用户名登录：");
+                    String name = sc.nextLine();
+                    login.setUserName(name);
 
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setMessage(line);
-                    ByteBuf byteBuf = PacketCodec.INSTANCE.encode(packet, channel.alloc());
-                    channel.writeAndFlush(byteBuf);
+                    //密码使用默认的
+                    login.setPassWord("pwd");
+
+                    channel.writeAndFlush(login);
+                    waitForLoginResponse();
+                }else {
+                    String toUserId= sc.nextLine();
+                    String text = sc.nextLine();
+                    channel.writeAndFlush(new MessageRequestPacket(toUserId, text));
                 }
             }
         });
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

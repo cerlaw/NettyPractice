@@ -15,6 +15,9 @@ public class MessagResponseHandler extends SimpleChannelInboundHandler<MessageRe
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageResponsePacket messageResponsePacket) throws Exception {
-        System.out.println(new Date() + "客户端收到服务端回复信息：" + messageResponsePacket.getMessage());
+
+        String fromUserId = messageResponsePacket.getFromUserId();
+        String fromUserName = messageResponsePacket.getFromUserName();
+        System.out.println(fromUserId + ":" + fromUserName + "->" + messageResponsePacket.getMessage());
     }
 }

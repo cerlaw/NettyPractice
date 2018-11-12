@@ -32,7 +32,7 @@ public class HeartBeatTimerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         future = ctx.executor().scheduleAtFixedRate(() -> {
-                    System.out.println("客户端发送心跳包");
+//                    System.out.println("客户端发送心跳包");
                     ctx.writeAndFlush(new HeartBeatRequestPacket());
                 },
                 HEARTBEAT_INTERVAL, HEARTBEAT_INTERVAL, TimeUnit.SECONDS);

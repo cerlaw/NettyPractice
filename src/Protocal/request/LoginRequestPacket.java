@@ -8,11 +8,11 @@ import static Protocal.Command.Command.LOGIN_REQUEST;
 @Data
 public class LoginRequestPacket extends Packet {
 
-    private String userId;
+    String userId;
 
-    private String userName;
+    String userName;
 
-    private String passWord;
+    String passWord;
 
     @Override
     public Byte getCommand() {
